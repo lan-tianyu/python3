@@ -13,7 +13,6 @@ def gen_find(filepat, top):
 
 def gen_opener(filenames):
     for filename in filenames:
-        print('filename ---', filename)
         if filename.endswith('.gz'):
             f = gzip.open(filename, 'rt')
         elif filename.endswith('.bz2'):
@@ -32,15 +31,21 @@ def gen_concatenate(iterators):
 def gen_grep(pattern, lines):
     pat = re.compile(pattern)
     for line in lines:
-        print('line----', line)
         if pat.search(line):
             yield line
 
 
-lognames = gen_find('somefile.log', 'CookBook-Learning\\tmp')
-# print('logname', lognames, list(lognames))
+base_dir = os.path.abspath(os.path.join(os.path.abspath(__file__), '../../..'))
+print('base_dir', base_dir)
+lognames = gen_find('somefile*.log', os.path.join(base_dir, 'tmp'))
 files = gen_opener(lognames)
+print('files', list(files))
 lines = gen_concatenate(files)
-pylines = gen_grep('(?i)python', lines)
-for line in pylines:
-    print(line)
+print('lines', list(lines))
+pylines = gen_grep('(?i)GET', lines)
+# for line in pylines:
+#     print('line--', line)
+
+bytecolumn = (line.rsplit(None, 1)[1] for line in pylines)
+bytes = [int(x) for x in bytecolumn if x != '-']
+print('Total', sum(bytes))
