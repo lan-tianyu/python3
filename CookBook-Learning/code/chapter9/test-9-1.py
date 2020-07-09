@@ -5,10 +5,10 @@ from functools import wraps
 def timethis(func):
     @wraps(func)
     def wrapper(*args, **kwargs):
-        start = time.time()
+        st = time.time()
         result = func(*args, **kwargs)
-        end = time.time()
-        print(func.__name__, end - start)
+        et = time.time()
+        print(func.__name__, et - st)
         return result
 
     return wrapper
@@ -16,24 +16,22 @@ def timethis(func):
 
 @timethis
 def countdown(n):
-    while n >= 0:
+    while n > 0:
         n -= 1
 
 
+countdown(1000)
 countdown(1000000)
+countdown(10000000)
 
 
 class A:
     @classmethod
-    def method(cls):
-        print('dajdn')
+    def method(self):
+        pass
 
 
 class B:
-    def method(cls):
+    def method(self):
         pass
-
     method = classmethod(method)
-
-a = A()
-a.method()
